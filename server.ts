@@ -2,7 +2,6 @@
  * @file Implements an Express Node HTTP server.
  */
 import express, {Request, Response} from 'express';
-import bodyParser from "body-parser";
 import * as mongoose from "mongoose";
 import UserDao from "./daos/UserDao";
 import UserController from "./controllers/UserController";
@@ -11,7 +10,6 @@ var cors = require('cors');
 const app = express();  // express is a library  that allows you to create HTTP servers
 app.use(cors());        // cors is tech that allows you to have people outside your domain to connect safely to your server
 app.use(express.json());        // configuring our server so that it can parse json; json = format that data will be formatted as
-app.use(bodyParser.json());
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
