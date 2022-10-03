@@ -2,10 +2,30 @@
  * @file Implements an Express Node HTTP server.
  */
 import express, {Request, Response} from 'express';
-var cors = require('cors')
-const app = express();  // express is a library
+import bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import UserDao from "./daos/UserDao";
+import UserController from "./controllers/UserController";
+import TuitController from "./controllers/TuitController";
+var cors = require('cors');
+const app = express();  // express is a library  that allows you to create HTTP servers
 app.use(cors());        // cors is tech that allows you to have people outside your domain to connect safely to your server
-app.use(express.json());        // json = format that data will be formatted as
+app.use(express.json());        // configuring our server so that it can parse json; json = format that data will be formatted as
+app.use(bodyParser.json());
+const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    autoIndex: false,
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4
+}
+mongoose.connect('mongodb://localhost:27017/tuiter');   // connect to mongo - tuiter database
+
+const userDao = new UserDao();
+const userController = new UserController(app, userDao);
+const tuitController = TuitController.getInstance(app);
 
 
 function sayHello(req: Request, res: Response) {
@@ -13,8 +33,8 @@ function sayHello(req: Request, res: Response) {
 }
 
 // Where we configure server to listen to incoming requests / messages
-// HTP Methods: get, post, put, delete
-app.get('/', sayHello);    // get takes 2 args (string, function)
+// HTTP Methods: get, post, put, delete
+app.get('/', sayHello);    // get function takes 2 args (string, function); string = pattern of url
 
 app.get('/hello', (req: Request, res: Response) =>
     res.send('Welcome to Foundation of Software Engineering!'));
