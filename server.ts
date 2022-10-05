@@ -20,7 +20,9 @@ const options = {
     socketTimeoutMS: 45000,
     family: 4
 }
-mongoose.connect('mongodb://localhost:27017/tuiter', options);   // connect to mongo - tuiter database
+//mongoose.connect('mongodb://localhost:27017/tuiter', options);   // connect to mongo - tuiter database
+mongoose.connect('mongodb+srv://fse_tuiter:m7RwBEdMZHSqPs0k@cluster0.3ivwj4w.mongodb.net/tuiter?retryWrites=true&w=majority',
+    options);
 
 const userDao = new UserDao();
 const userController = new UserController(app, userDao);
