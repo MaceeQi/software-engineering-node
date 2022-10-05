@@ -23,7 +23,7 @@ export default class TuitDao implements TuitDaoI {
         return await TuitModel.find({postedBy: uid});
     }
 
-    async findTuitByID(tid: string): Promise<any> {
+    async findTuitById(tid: string): Promise<any> {
         return await TuitModel.findById(tid);
     }
 
@@ -31,9 +31,9 @@ export default class TuitDao implements TuitDaoI {
         return await TuitModel.create(tuit);
     }
 
-    async updateTuit(tid: string, tuit: Tuit): Promise<any> {
+    async updateTuit(tid: string, tuit: any): Promise<any> {
         return await TuitModel.updateOne({_id: tid}, {$set:
-                {tuit: tuit.tuitMessage, postedOn: tuit.postedOnDate, postedby: tuit.postedByUser}});
+                {tuit: tuit.tuit, postedOn: tuit.postedOn, postedBy: tuit.postedBy}});
     }
 
     async deleteTuit(tid: string): Promise<any> {

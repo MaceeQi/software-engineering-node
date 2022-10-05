@@ -4,6 +4,7 @@
 import express, {Request, Response} from 'express';
 import * as mongoose from "mongoose";
 import UserDao from "./daos/UserDao";
+import TuitDao from "./daos/TuitDao";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 var cors = require('cors');
@@ -23,8 +24,8 @@ mongoose.connect('mongodb://localhost:27017/tuiter', options);   // connect to m
 
 const userDao = new UserDao();
 const userController = new UserController(app, userDao);
-const tuitController = TuitController.getInstance(app);
-
+const tuitDao = TuitDao.getInstance();
+const tuitController = TuitController.getInstance(app, tuitDao);
 
 function sayHello(req: Request, res: Response) {
     res.send('Welcome to Foundation of Software Engineering!');

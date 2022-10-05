@@ -18,6 +18,7 @@ export default class UserController implements UserControllerI {
         this.app.delete('/users/:userid', this.deleteUser);
         this.app.put('/users/:userid', this.updateUser);
     }
+
     findAllUsers = (req: Request, res: Response) =>
         this.userDao.findAllUsers()
             .then(users => res.json(users));
