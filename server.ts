@@ -38,7 +38,7 @@ function sayHello(req: Request, res: Response) {
 app.get('/', sayHello);    // get function takes 2 args (string, function); string = pattern of url
 
 app.get('/hello', (req: Request, res: Response) =>
-    res.send('Welcome to Foundation of Software Engineering!'));
+    res.send('Hello World!'));
 
 /**
  * Start a server listening at port 4000 locally
