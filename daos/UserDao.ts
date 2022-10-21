@@ -5,6 +5,14 @@ import UserModel from "../mongoose/UserModel";
 import UserDaoI from "../interfaces/UserDaoI";
 
 export default class UserDao implements UserDaoI {
+    private static userDao: UserDao | null = null;
+    public static getInstance = (): UserDao => {
+        if(UserDao.userDao === null) {
+            UserDao.userDao = new UserDao();
+        }
+        return UserDao.userDao;
+    }
+    private constructor() {}
 
     async findAllUsers(): Promise<User[]> {
         const userMongooseModels = await UserModel.find();

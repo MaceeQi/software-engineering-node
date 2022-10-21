@@ -3,8 +3,6 @@
  */
 import express, {Request, Response} from 'express';
 import * as mongoose from "mongoose";
-import UserDao from "./daos/UserDao";
-import TuitDao from "./daos/TuitDao";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 var cors = require('cors');
@@ -20,14 +18,9 @@ const options = {
     socketTimeoutMS: 45000,
     family: 4
 }
-//mongoose.connect('mongodb://localhost:27017/tuiter', options);   // connect to mongo - tuiter database
+//mongoose.connect('mongodb://localhost:27017/tuiter', options);   // connect to mongo compass - local tuiter database
 mongoose.connect('mongodb+srv://fse_tuiter:m7RwBEdMZHSqPs0k@cluster0.3ivwj4w.mongodb.net/tuiter?retryWrites=true&w=majority',
-    options);
-
-const userDao = new UserDao();
-const userController = new UserController(app, userDao);
-const tuitDao = TuitDao.getInstance();
-const tuitController = TuitController.getInstance(app, tuitDao);
+options);
 
 function sayHello(req: Request, res: Response) {
     res.send('Welcome to Foundation of Software Engineering!');
@@ -39,6 +32,9 @@ app.get('/', sayHello);    // get function takes 2 args (string, function); stri
 
 app.get('/hello', (req: Request, res: Response) =>
     res.send('Hello World!'));
+
+const userController = UserController.getInstance(app);
+const tuitController = TuitController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally

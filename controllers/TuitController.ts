@@ -3,25 +3,24 @@ with the database
  */
 
 import {Request, Response, Express} from "express";
+import TuitDao from "../daos/TuitDao";
 import TuitControllerI from "../interfaces/TuitControllerI";
-import TuitDaoI from "../interfaces/TuitDaoI";
 
 export default class TuitController implements TuitControllerI {
     // Singleton Design Pattern
     private static tuitController: TuitController | null = null;
-    private static tuitDao: TuitDaoI;
-    public static getInstance = (app: Express, tuitDao: TuitDaoI): TuitController => {
+    private static tuitDao: TuitDao = TuitDao.getInstance();
+    public static getInstance = (app: Express): TuitController => {
         if (TuitController.tuitController === null) {
             TuitController.tuitController = new TuitController();
-        }
-        TuitController.tuitDao = tuitDao;
-        app.get('/api/tuits', TuitController.tuitController.findAllTuits);
-        app.get('/api/tuits/:tid', TuitController.tuitController.findTuitById);
-        app.get('/api/users/:uid/tuits', TuitController.tuitController.findTuitsByUser);
-        app.post('/api/tuits', TuitController.tuitController.createTuit);
-        app.delete('/api/tuits/:tid', TuitController.tuitController.deleteTuit);
-        app.put('/api/tuits/:tid', TuitController.tuitController.updateTuit);
 
+            app.get('/api/tuits', TuitController.tuitController.findAllTuits);
+            app.get('/api/tuits/:tid', TuitController.tuitController.findTuitById);
+            app.get('/api/users/:uid/tuits', TuitController.tuitController.findTuitsByUser);
+            app.post('/api/tuits', TuitController.tuitController.createTuit);
+            app.delete('/api/tuits/:tid', TuitController.tuitController.deleteTuit);
+            app.put('/api/tuits/:tid', TuitController.tuitController.updateTuit);
+        }
         return TuitController.tuitController;
     }
     private constructor() {}
