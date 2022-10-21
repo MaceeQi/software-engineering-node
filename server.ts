@@ -5,6 +5,7 @@ import express, {Request, Response} from 'express';
 import * as mongoose from "mongoose";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
+import LikeController from "./controllers/LikeController";
 var cors = require('cors');
 const app = express();  // express is a library  that allows you to create HTTP servers
 app.use(cors());        // cors is tech that allows you to have people outside your domain to connect safely to your server
@@ -35,6 +36,7 @@ app.get('/hello', (req: Request, res: Response) =>
 
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
+const likesController = LikeController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
