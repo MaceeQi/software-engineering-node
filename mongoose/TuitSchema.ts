@@ -1,7 +1,14 @@
-/* Represent user document instances stored in a MongoDB database */
-
+/**
+ * @file Implements mongoose schema for tuits
+ */
 import mongoose from "mongoose";
 
+/**
+ * @typedef Tuit Represents a tuit
+ * @property {string} tuit Body of the tuit
+ * @property {Date} postedOn Date the tuit was posted on
+ * @property {ObjectId[]} postedBy User that posted the tuit
+ */
 const TuitSchema = new mongoose.Schema({
     tuit: {type: String, required: true},
     postedOn: {type: Date, default: Date.now},

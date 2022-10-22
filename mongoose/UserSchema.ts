@@ -1,7 +1,24 @@
-/* Represent user document instances stored in a MongoDB database */
-
+/**
+ * @file Implements mongoose schema for users
+ */
 import mongoose from "mongoose";
 
+/**
+ * @typedef User Represents a user
+ * @property {string} username Username of the user's account
+ * @property {string} password Password for the user's account
+ * @property {string} firstName User's first name
+ * @property {string} lastName User's last name
+ * @property {string} email User's email address
+ * @property {string} profilePhoto User's profile photo
+ * @property {string} headerImage Header image in user's profile
+ * @property {string} accountType User's type of account
+ * @property {string} maritalStatus User's marital status
+ * @property {string} biography User's biography
+ * @property {Date} dateOfBirth User's date of birth
+ * @property {Date} joined Date user created an account
+ * @property {number} location User's location
+*/
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},

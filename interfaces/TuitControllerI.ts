@@ -1,9 +1,8 @@
-/* Interface to implement a Tuit controller that handles HTTP events that create, read, update
-and delete user instances
- */
-
 import {Request, Response} from "express";
 
+/**
+ * @file Declares RESTful Web service API for Tuits resource
+ */
 export default interface TuitControllerI {
     findAllTuits(req: Request, res: Response): void;
     findTuitById(req: Request, res: Response): void;

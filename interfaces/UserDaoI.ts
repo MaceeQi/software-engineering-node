@@ -1,9 +1,8 @@
-/* Interface that defines the contract the UserDaoI will implement. The interface declares CRUD
-operations the DAO must implement
- */
-
 import User from "../models/User";
 
+/**
+ * @file Declares API for Users related data access object methods
+ */
 export default interface UserDaoI {
     findAllUsers(): Promise<User[]>;
     findUserById(uid: string): Promise<User>;

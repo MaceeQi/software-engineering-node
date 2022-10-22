@@ -1,5 +1,8 @@
 import {Request, Response} from "express";
 
+/**
+ * @file Declares RESTful Web service API for Messages resource
+ */
 export default interface MessageControllerI {
     userMessagesUser (req: Request, res: Response): void;
     userDeletesMessage (req: Request, res: Response): void;

@@ -1,9 +1,8 @@
-/* Interface to implement a User controller that handles HTTP events that create, read, update, and delete
-user instances
- */
-
 import {Request, Response} from "express";
 
+/**
+ * @file Declares RESTful Web service API for Users resource
+ */
 export default interface UserControllerI {
     findAllUsers(req: Request, res: Response): void;
     findUserById(req: Request, res: Response): void;
