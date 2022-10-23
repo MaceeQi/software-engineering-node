@@ -2,6 +2,7 @@
  * @file Implements mongoose schema for tuits
  */
 import mongoose from "mongoose";
+import Tuit from "../models/Tuit";
 
 /**
  * @typedef Tuit Represents a tuit
@@ -9,7 +10,7 @@ import mongoose from "mongoose";
  * @property {Date} postedOn Date the tuit was posted on
  * @property {ObjectId[]} postedBy User that posted the tuit
  */
-const TuitSchema = new mongoose.Schema({
+const TuitSchema = new mongoose.Schema<Tuit>({
     tuit: {type: String, required: true},
     postedOn: {type: Date, default: Date.now},
     // Declares a foreign key to a user's instance stored in the database. It can be replaced with actual instance with populate()
