@@ -15,6 +15,7 @@ import UserControllerI from "../interfaces/UserControllerI";
  *     <li>PUT /api/users/:userid to modify an individual user instance </li>
  *     <li>DELETE /api/users/:userid to remove a particular user instance</li>
  *     <li>DELETE /api/users to remove all user instances </li>
+ *     <li>DELETE /api/users/username/:username/delete to remove a particular user instance with given username</li>
  * </ul>
  * @property {UserDao} userDao Singleton DAO implementing user CRUD operations
  * @property {UserController} userController Singleton controller implementing
@@ -40,9 +41,7 @@ export default class UserController implements UserControllerI {
             app.put('/api/users/:userid', UserController.userController.updateUser);
             app.delete('/api/users/:userid', UserController.userController.deleteUser);
             app.delete('/api/users', UserController.userController.deleteAllUsers);
-
-            // for testing. Not RESTful
-            app.get('/api/users/username/:username/delete', UserController.userController.deleteUsersByUsername);
+            app.delete('/api/users/username/:username/delete', UserController.userController.deleteUsersByUsername);
         }
         return UserController.userController;
     }
