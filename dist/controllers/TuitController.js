@@ -55,7 +55,7 @@ class TuitController {
          * body formatted as JSON containing the new tuit that was inserted in the
          * database
          */
-        this.createTuit = (req, res) => TuitController.tuitDao.createTuit(req.body).then(actualTuit => res.json(actualTuit));
+        this.createTuit = (req, res) => TuitController.tuitDao.createTuit(req.params.uid, req.body).then(actualTuit => res.json(actualTuit));
         /**
          * Removes a tuit instance from the database
          * @param {Request} req Represents request from client, including path
@@ -91,7 +91,7 @@ TuitController.getInstance = (app) => {
         app.get('/api/tuits', TuitController.tuitController.findAllTuits);
         app.get('/api/tuits/:tid', TuitController.tuitController.findTuitById);
         app.get('/api/users/:uid/tuits', TuitController.tuitController.findTuitsByUser);
-        app.post('/api/tuits', TuitController.tuitController.createTuit);
+        app.post('/api/users/:uid/tuits', TuitController.tuitController.createTuit);
         app.delete('/api/tuits/:tid', TuitController.tuitController.deleteTuit);
         app.put('/api/tuits/:tid', TuitController.tuitController.updateTuit);
     }

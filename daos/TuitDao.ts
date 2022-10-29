@@ -56,6 +56,7 @@ export default class TuitDao implements TuitDaoI {
 
     /**
      * Inserts tuit instance into the database
+     * @param {string} uid User posting the tuit's primary key
      * @param {Tuit} tuit Instance to be inserted into the database
      * @returns Promise To be notified when tuit is inserted into the database
      */

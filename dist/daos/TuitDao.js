@@ -53,12 +53,13 @@ class TuitDao {
     }
     /**
      * Inserts tuit instance into the database
+     * @param {string} uid User posting the tuit's primary key
      * @param {Tuit} tuit Instance to be inserted into the database
      * @returns Promise To be notified when tuit is inserted into the database
      */
-    createTuit(tuit) {
+    createTuit(uid, tuit) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield TuitModel_1.default.create(tuit);
+            return yield TuitModel_1.default.create(Object.assign(Object.assign({}, tuit), { postedBy: uid }));
         });
     }
     /**
