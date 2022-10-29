@@ -12,7 +12,7 @@ import TuitControllerI from "../interfaces/TuitControllerI";
  *     <li>GET /api/tuits to retrieve all the tuit instances</li>
  *     <li>GET /api/tuits/:tid to retrieve a particular tuit instance</li>
  *     <li>GET /api/users/:uid/tuits to retrieve tuits for a given user </li>
- *     <li>POST /api/tuits to create a new tuit instance</li>
+ *     <li>POST /api/users/:uid/tuits to create a new tuit instance</li>
  *     <li>DELETE /api/tuits/:tid to remove a particular tuit instance</li>
  *     <li>PUT /api/tuits/:tid to modify an individual tuit instance </li>
  * </ul>
@@ -78,9 +78,10 @@ export default class TuitController implements TuitControllerI {
 
     /**
      * Creates a new tuit instance
-     * @param {Request} req Represents request from client, including body
-     * containing the JSON object for the new tuit to be inserted in the
-     * database
+     * @param {Request} req Represents request from client, including path
+     * parameter uid identifying the primary key of the user that created
+     * the tuit and body containing the JSON object for the new tuit to be
+     * inserted in the database
      * @param {Response} res Represents response to client, including the
      * body formatted as JSON containing the new tuit that was inserted in the
      * database
