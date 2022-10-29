@@ -85,6 +85,25 @@ class UserDao {
             return yield UserModel_1.default.updateOne({ _id: uid }, { $set: { username: user.username, password: user.password } });
         });
     }
+    /**
+     * Removes all users from the database
+     * @returns Promise To be notified when all users are removed from the database
+     */
+    deleteAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield UserModel_1.default.deleteMany({});
+        });
+    }
+    /**
+     * Removes user from the database
+     * @param {string} username Username of user to be removed
+     * @returns Promise To be notified when user is removed from the database
+     */
+    deleteUsersByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield UserModel_1.default.deleteMany({ username });
+        });
+    }
 }
 exports.default = UserDao;
 UserDao.userDao = null;
