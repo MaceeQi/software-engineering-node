@@ -22,9 +22,34 @@ import LikeController from "./controllers/LikeController";
 import FollowController from "./controllers/FollowController";
 import BookmarkController from "./controllers/BookmarkController";
 import MessageController from "./controllers/MessageController";
+import AuthenticationController from "./controllers/AuthenticationController";
+
 var cors = require('cors');
+const session = require('express-session'); // express session establish identity and dialogs btwn users and servers exchanging stateless HTTP req/res
 const app = express();  // express is a library  that allows you to create HTTP servers
-app.use(cors());        // cors is tech that allows you to have people outside your domain to connect safely to your server
+
+let sess = {
+    secret: `${process.env.SECRET}`,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false
+    }
+}
+app.use(session(sess));
+
+if (process.env.ENV === 'PRODUCTION') {
+    app.set('trust proxy', 1)   // trust first proxy
+    sess.cookie.secure = true   // serve secure cookies
+}
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));        // cors is tech that allows you to have people outside your domain to connect safely to your server
 app.use(express.json());        // configuring our server so that it can parse json; json = format that data will be formatted as
 const options = {
     useNewUrlParser: true,
@@ -68,6 +93,7 @@ const likeController = LikeController.getInstance(app);
 const followController = FollowController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const messageController = MessageController.getInstance(app);
+const authenticationController = AuthenticationController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally

@@ -45,7 +45,13 @@ class TuitController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the tuit objects
          */
-        this.findTuitsByUser = (req, res) => TuitController.tuitDao.findTuitsByUser(req.params.uid).then(tuits => res.json(tuits));
+        this.findTuitsByUser = (req, res) => {
+            // if user id is "me" and there's a user logged in: get user id from logged in user
+            // otherwise use parameter
+            let userId = req.params.uid === "me"
+                && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+            TuitController.tuitDao.findTuitsByUser(userId).then(tuits => res.json(tuits));
+        };
         /**
          * Creates a new tuit instance
          * @param {Request} req Represents request from client, including path
@@ -56,7 +62,13 @@ class TuitController {
          * body formatted as JSON containing the new tuit that was inserted in the
          * database
          */
-        this.createTuit = (req, res) => TuitController.tuitDao.createTuit(req.params.uid, req.body).then(actualTuit => res.json(actualTuit));
+        this.createTuit = (req, res) => {
+            // if user id is "me" and there's a logged in user: get user id from logged in user
+            // otherwise use parameter
+            let userId = req.params.uid === "me"
+                && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+            TuitController.tuitDao.createTuit(userId, req.body).then(actualTuit => res.json(actualTuit));
+        };
         /**
          * Removes a tuit instance from the database
          * @param {Request} req Represents request from client, including path

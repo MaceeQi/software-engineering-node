@@ -34,7 +34,7 @@ const mongoose_1 = __importStar(require("mongoose"));
  */
 const LikeSchema = new mongoose_1.default.Schema({
     tuit: { type: mongoose_1.Schema.Types.ObjectId, ref: "TuitModel" },
-    likedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "UserModel" },
+    likedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "UserModel" }, // reference to a user
 }, { collection: "likes" });
 exports.default = LikeSchema;
 //# sourceMappingURL=LikeSchema.js.map

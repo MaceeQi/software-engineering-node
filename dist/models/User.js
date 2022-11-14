@@ -57,6 +57,9 @@ class User {
         this.lastName = lastName;
         this.email = email;
     }
+    setPassword(password) {
+        this.password = password;
+    }
 }
 exports.default = User;
 //# sourceMappingURL=User.js.map

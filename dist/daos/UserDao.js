@@ -53,6 +53,17 @@ class UserDao {
         });
     }
     /**
+     * Uses UserModel to retrieve a single user document from users collection that matches the
+     * username
+     * @param {string} username User's username
+     * @returns Promise To be notified when user is retrieved from the database
+     */
+    findUserByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield UserModel_1.default.findOne({ username });
+        });
+    }
+    /**
      * Inserts user instance into the database
      * @param {User} user Instance to be inserted into the database
      * @returns Promise To be notified when user is inserted into the database

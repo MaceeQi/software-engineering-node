@@ -49,9 +49,29 @@ const LikeController_1 = __importDefault(require("./controllers/LikeController")
 const FollowController_1 = __importDefault(require("./controllers/FollowController"));
 const BookmarkController_1 = __importDefault(require("./controllers/BookmarkController"));
 const MessageController_1 = __importDefault(require("./controllers/MessageController"));
+const AuthenticationController_1 = __importDefault(require("./controllers/AuthenticationController"));
 var cors = require('cors');
+const session = require('express-session'); // express session establish identity and dialogs btwn users and servers exchanging stateless HTTP req/res
 const app = (0, express_1.default)(); // express is a library  that allows you to create HTTP servers
-app.use(cors()); // cors is tech that allows you to have people outside your domain to connect safely to your server
+let sess = {
+    secret: `${process.env.SECRET}`,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false
+    }
+};
+app.use(session(sess));
+if (process.env.ENV === 'PRODUCTION') {
+    app.set('trust proxy', 1); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+}
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200
+};
+app.use(cors(corsOptions)); // cors is tech that allows you to have people outside your domain to connect safely to your server
 app.use(express_1.default.json()); // configuring our server so that it can parse json; json = format that data will be formatted as
 const options = {
     useNewUrlParser: true,
@@ -89,6 +109,7 @@ const likeController = LikeController_1.default.getInstance(app);
 const followController = FollowController_1.default.getInstance(app);
 const bookmarkController = BookmarkController_1.default.getInstance(app);
 const messageController = MessageController_1.default.getInstance(app);
+const authenticationController = AuthenticationController_1.default.getInstance(app);
 /**
  * Start a server listening at port 4000 locally
  * but use environment variable PORT on AWS if available.
