@@ -89,7 +89,7 @@ app.get('/hello', (req: Request, res: Response) =>
 // create RESTful Web service API
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
-const likeController = LikeController.getInstance(app);
+const likeController = LikeController.getInstance(app, tuitController);
 const followController = FollowController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const messageController = MessageController.getInstance(app);
