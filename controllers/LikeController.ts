@@ -42,6 +42,7 @@ export default class LikeController implements LikeControllerI {
     public static getInstance = (app: Express, tuitController: TuitController): LikeController => {
         if(LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
+            LikeController.tuitController = tuitController;
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);

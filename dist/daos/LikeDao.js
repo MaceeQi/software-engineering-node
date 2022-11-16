@@ -58,6 +58,19 @@ class LikeDao {
          * @returns Promise To be notified when like is removed from the database
          */
         this.userUnlikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.deleteOne({ tuit: tid, likedBy: uid }); });
+        /**
+         * Uses LikeModel to retrieve a like document from likes collection where a user
+         * liked a particular tuit
+         * @param {string} uid Primary key of the user that liked the particular tuit
+         * @param {string} tid Primary key of the tuit that was liked by a particular user
+         * @returns Promise To be notified when like is retrieved from database
+         */
+        this.findUserLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.findOne({ tuit: tid, likedBy: uid }); });
+        /**
+         * Uses LikeModel to count how many like documents there are for a given tuit
+         * @param {string} tid Primary key of the tuit that has likes
+         */
+        this.countHowManyLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.count({ tid: tid }); });
     }
 }
 exports.default = LikeDao;

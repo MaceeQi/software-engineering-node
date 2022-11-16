@@ -83,6 +83,16 @@ class TuitDao {
             return TuitModel_1.default.updateOne({ _id: tid }, { $set: { tuit: tuit.tuit, postedOn: tuit.postedOn, postedBy: tuit.postedBy } });
         });
     }
+    /**
+     * Updates the tuit's stats attribute for number of likes in database
+     * @param {string} tid Primary key of tuit to be modified
+     * @param {any} newStats Stats object to be updated for the tuit
+     */
+    updateLikes(tid, newStats) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return TuitModel_1.default.updateOne({ _id: tid }, { $set: { stats: newStats } });
+        });
+    }
 }
 exports.default = TuitDao;
 TuitDao.tuitDao = null;
