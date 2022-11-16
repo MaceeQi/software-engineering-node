@@ -105,7 +105,7 @@ app.get('/hello', (req, res) => res.send('Hello World!'));
 // create RESTful Web service API
 const userController = UserController_1.default.getInstance(app);
 const tuitController = TuitController_1.default.getInstance(app);
-const likeController = LikeController_1.default.getInstance(app, tuitController);
+const likeController = LikeController_1.default.getInstance(app);
 const followController = FollowController_1.default.getInstance(app);
 const bookmarkController = BookmarkController_1.default.getInstance(app);
 const messageController = MessageController_1.default.getInstance(app);

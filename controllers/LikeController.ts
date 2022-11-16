@@ -4,7 +4,6 @@
 import LikeControllerI from "../interfaces/LikeControllerI";
 import LikeDao from "../daos/LikeDao";
 import {Express, Request, Response} from "express";
-import TuitController from "./TuitController";
 import TuitDao from "../daos/TuitDao";
 
 /**
@@ -24,13 +23,12 @@ import TuitDao from "../daos/TuitDao";
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
  * @property {LikeController} likeController Singleton controller implementing
  * RESTful Web service API
- * @property {TuitController} tuitController TuitController instance that aids in
+ * @property {TuitDao} tuitDao TuitDao instance that aids in
  * implementing RESTful Web service API for likes
  */
 export default class LikeController implements LikeControllerI {
     private static likeDao: LikeDao = LikeDao.getInstance();
     private static likeController: LikeController | null = null;
-    private static tuitController: TuitController | null = null;
     private static tuitDao: TuitDao = TuitDao.getInstance();
 
     /**
@@ -123,6 +121,7 @@ export default class LikeController implements LikeControllerI {
             const userAlreadyLikedTuit = await LikeController.likeDao.findUserLikesTuit(userId, tid);
             // Count how many like this tuit
             const howManyLikedTuit = await LikeController.likeDao.countHowManyLikedTuit(tid);
+            console.log(howManyLikedTuit)
 
             // Get tuit to get current stats
             let tuit = await LikeController.tuitDao.findTuitById(tid);

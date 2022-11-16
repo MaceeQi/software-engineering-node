@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const LikeDao_1 = __importDefault(require("../daos/LikeDao"));
+const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
 /**
  * @class LikeController Implements RESTful Web service API for likes resource
  * Defines the following HTTP endpoints:
@@ -92,15 +93,10 @@ class LikeController {
             try {
                 // Check if user already liked tuit
                 const userAlreadyLikedTuit = yield LikeController.likeDao.findUserLikesTuit(userId, tid);
-                console.log("here1");
                 // Count how many like this tuit
                 const howManyLikedTuit = yield LikeController.likeDao.countHowManyLikedTuit(tid);
-                console.log("here2");
                 // Get tuit to get current stats
-                const tuitDao = LikeController.tuitController.getTuitDao();
-                console.log("Here2.5");
-                let tuit = yield tuitDao.findTuitById(tid);
-                console.log("here3");
+                let tuit = yield LikeController.tuitDao.findTuitById(tid);
                 // Already liked: unlike + decrement likes count
                 if (userAlreadyLikedTuit) {
                     yield LikeController.likeDao.userUnlikesTuit(userId, tid);
@@ -111,10 +107,8 @@ class LikeController {
                     yield LikeController.likeDao.userLikesTuit(userId, tid);
                     tuit.stats.likes = howManyLikedTuit + 1;
                 }
-                console.log("here4");
                 // Update likes count
-                yield tuitDao.updateLikes(tid, tuit.stats);
-                console.log("here5");
+                yield LikeController.tuitDao.updateLikes(tid, tuit.stats);
                 res.sendStatus(200);
             }
             catch (e) {
@@ -128,6 +122,7 @@ exports.default = LikeController;
 LikeController.likeDao = LikeDao_1.default.getInstance();
 LikeController.likeController = null;
 LikeController.tuitController = null;
+LikeController.tuitDao = TuitDao_1.default.getInstance();
 /**
  * Creates singleton controller instance
  * @param {Express} app Express instance to declare the RESTful Web service
@@ -136,10 +131,9 @@ LikeController.tuitController = null;
  * Web service API for likes
  * @return LikeController
  */
-LikeController.getInstance = (app, tuitController) => {
+LikeController.getInstance = (app) => {
     if (LikeController.likeController === null) {
         LikeController.likeController = new LikeController();
-        LikeController.tuitController = tuitController;
         app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
         app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
         app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
