@@ -5,6 +5,7 @@ import LikeControllerI from "../interfaces/LikeControllerI";
 import LikeDao from "../daos/LikeDao";
 import {Express, Request, Response} from "express";
 import TuitController from "./TuitController";
+import TuitDao from "../daos/TuitDao";
 
 /**
  * @class LikeController Implements RESTful Web service API for likes resource
@@ -30,6 +31,7 @@ export default class LikeController implements LikeControllerI {
     private static likeDao: LikeDao = LikeDao.getInstance();
     private static likeController: LikeController | null = null;
     private static tuitController: TuitController | null = null;
+    private static tuitDao: TuitDao = TuitDao.getInstance();
 
     /**
      * Creates singleton controller instance
@@ -39,10 +41,9 @@ export default class LikeController implements LikeControllerI {
      * Web service API for likes
      * @return LikeController
      */
-    public static getInstance = (app: Express, tuitController: TuitController): LikeController => {
+    public static getInstance = (app: Express): LikeController => {
         if(LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
-            LikeController.tuitController = tuitController;
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
@@ -124,8 +125,7 @@ export default class LikeController implements LikeControllerI {
             const howManyLikedTuit = await LikeController.likeDao.countHowManyLikedTuit(tid);
 
             // Get tuit to get current stats
-            const tuitDao = LikeController.tuitController.getTuitDao();
-            let tuit = await tuitDao.findTuitById(tid);
+            let tuit = await LikeController.tuitDao.findTuitById(tid);
 
             // Already liked: unlike + decrement likes count
             if (userAlreadyLikedTuit) {
@@ -139,7 +139,7 @@ export default class LikeController implements LikeControllerI {
             }
 
             // Update likes count
-            await tuitDao.updateLikes(tid, tuit.stats);
+            await LikeController.tuitDao.updateLikes(tid, tuit.stats);
             res.sendStatus(200);
         } catch (e) {
             // Respond with failure if there's an error
