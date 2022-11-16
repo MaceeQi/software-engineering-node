@@ -70,7 +70,10 @@ class LikeDao {
          * Uses LikeModel to count how many like documents there are for a given tuit
          * @param {string} tid Primary key of the tuit that has likes
          */
-        this.countHowManyLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.count({ tid: tid }); });
+        this.countHowManyLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () {
+            const count = yield LikeModel_1.default.count({ tuit: tid });
+            return count;
+        });
     }
 }
 exports.default = LikeDao;

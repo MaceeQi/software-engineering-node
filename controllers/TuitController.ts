@@ -45,11 +45,6 @@ export default class TuitController implements TuitControllerI {
     }
     private constructor() {}
 
-
-    public getTuitDao = () => {
-        return TuitController.tuitDao;
-    }
-
     /**
      * Retrieves all tuits from the database and returns an array of tuits
      * @param {Request} req Represents request from client

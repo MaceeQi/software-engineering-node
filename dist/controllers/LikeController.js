@@ -31,7 +31,7 @@ const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
  * @property {LikeController} likeController Singleton controller implementing
  * RESTful Web service API
- * @property {TuitController} tuitController TuitController instance that aids in
+ * @property {TuitDao} tuitDao TuitDao instance that aids in
  * implementing RESTful Web service API for likes
  */
 class LikeController {
@@ -121,14 +121,11 @@ class LikeController {
 exports.default = LikeController;
 LikeController.likeDao = LikeDao_1.default.getInstance();
 LikeController.likeController = null;
-LikeController.tuitController = null;
 LikeController.tuitDao = TuitDao_1.default.getInstance();
 /**
  * Creates singleton controller instance
  * @param {Express} app Express instance to declare the RESTful Web service
  * API
- * @param {TuitController} tuitController TuitController instance to aid in RESTful
- * Web service API for likes
  * @return LikeController
  */
 LikeController.getInstance = (app) => {

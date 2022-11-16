@@ -35,8 +35,6 @@ export default class LikeController implements LikeControllerI {
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
      * API
-     * @param {TuitController} tuitController TuitController instance to aid in RESTful
-     * Web service API for likes
      * @return LikeController
      */
     public static getInstance = (app: Express): LikeController => {
@@ -121,7 +119,6 @@ export default class LikeController implements LikeControllerI {
             const userAlreadyLikedTuit = await LikeController.likeDao.findUserLikesTuit(userId, tid);
             // Count how many like this tuit
             const howManyLikedTuit = await LikeController.likeDao.countHowManyLikedTuit(tid);
-            console.log(howManyLikedTuit)
 
             // Get tuit to get current stats
             let tuit = await LikeController.tuitDao.findTuitById(tid);

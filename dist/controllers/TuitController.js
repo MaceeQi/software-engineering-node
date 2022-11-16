@@ -21,9 +21,6 @@ const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
  */
 class TuitController {
     constructor() {
-        this.getTuitDao = () => {
-            return TuitController.tuitDao;
-        };
         /**
          * Retrieves all tuits from the database and returns an array of tuits
          * @param {Request} req Represents request from client
