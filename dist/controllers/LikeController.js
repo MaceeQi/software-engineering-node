@@ -75,8 +75,6 @@ class LikeController {
          */
         this.userUnlikesTuit = (req, res) => LikeController.likeDao.userUnlikesTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
-        this.findUserLikesTuit = (req, res) => LikeController.likeDao.findUserLikesTuit(req.params.uid, req.params.tid)
-            .then(like => res.json(like));
         /**
          * Update likes count for tuit and insert or remove a like instance from the database
          * based on whether the user already has liked the tuit or not
@@ -108,15 +106,56 @@ class LikeController {
                 }
                 // Already disliked: change dislike to like, decrement dislikes count, increment likes count
                 else if (userAlreadyDislikedTuit) {
-                    yield LikeController.likeDao.updateLike(userId, tid, "LIKED");
                     const howManyDislikedTuit = yield LikeController.likeDao.countHowManyDislikedTuit(tid);
+                    yield LikeController.likeDao.updateLike(userId, tid, "LIKED");
                     tuit.stats.likes = howManyLikedTuit + 1;
                     tuit.stats.dislikes = howManyDislikedTuit - 1;
                 }
-                // Not yet liked: like + increment likes count
+                // Not yet liked or disliked: like + increment likes count
                 else {
                     yield LikeController.likeDao.userLikesTuit(userId, tid);
                     tuit.stats.likes = howManyLikedTuit + 1;
+                }
+                // Update likes count
+                yield LikeController.tuitDao.updateLikes(tid, tuit.stats);
+                res.sendStatus(200);
+            }
+            catch (e) {
+                // Respond with failure if there's an error
+                res.sendStatus(404);
+            }
+        });
+        this.userTogglesTuitDislikes = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const uid = req.params.uid;
+            const tid = req.params.tid;
+            const profile = req.session['profile'];
+            // If logged in, get ID from profile; Otherwise, use parameter
+            const userId = uid === "me" && profile ? profile._id : uid;
+            try {
+                // Check if user already liked tuit
+                const userAlreadyLikedTuit = yield LikeController.likeDao.findUserLikesTuit(userId, tid);
+                // Check if user already disliked tuit
+                const userAlreadyDislikedTuit = yield LikeController.likeDao.findUserDislikesTuit(userId, tid);
+                // Count how many dislike this tuit
+                const howManyDislikedTuit = yield LikeController.likeDao.countHowManyDislikedTuit(tid);
+                // Get tuit to get current stats
+                let tuit = yield LikeController.tuitDao.findTuitById(tid);
+                // Already liked: change like to dislike, decrement likes count, increment dislikes count
+                if (userAlreadyLikedTuit) {
+                    const howManyLikedTuit = yield LikeController.likeDao.countHowManyLikedTuit(tid);
+                    yield LikeController.likeDao.updateLike(userId, tid, "DISLIKED");
+                    tuit.stats.likes = howManyLikedTuit - 1;
+                    tuit.stats.dislikes = howManyDislikedTuit + 1;
+                }
+                // Already disliked: remove dislike + decrement dislikes count
+                else if (userAlreadyDislikedTuit) {
+                    yield LikeController.likeDao.userUnlikesTuit(userId, tid);
+                    tuit.stats.dislikes = howManyDislikedTuit - 1;
+                }
+                // Not yet disliked or liked: dislike + increment dislikes count
+                else {
+                    yield LikeController.likeDao.userDislikesTuit(userId, tid);
+                    tuit.stats.dislikes = howManyDislikedTuit + 1;
                 }
                 // Update likes count
                 yield LikeController.tuitDao.updateLikes(tid, tuit.stats);
@@ -147,7 +186,7 @@ LikeController.getInstance = (app) => {
         app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
         app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
         app.put("/api/users/:uid/likes/:tid", LikeController.likeController.userTogglesTuitLikes);
-        app.get("/api/users/:uid/likes/:tid", LikeController.likeController.findUserLikesTuit);
+        app.put("/api/users/:uid/dislikes/:tid", LikeController.likeController.userTogglesTuitDislikes);
     }
     return LikeController.likeController;
 };

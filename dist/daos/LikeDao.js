@@ -83,6 +83,7 @@ class LikeDao {
             const count = yield LikeModel_1.default.count({ tuit: tid, type: "DISLIKED" });
             return count;
         });
+        this.userDislikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.create({ tuit: tid, likedBy: uid, type: "DISLIKED" }); });
     }
 }
 exports.default = LikeDao;

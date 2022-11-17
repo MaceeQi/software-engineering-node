@@ -103,4 +103,6 @@ export default class LikeDao implements LikeDaoI {
         return count;
     }
 
+    userDislikesTuit = async (uid: string, tid: string): Promise<any> =>
+        LikeModel.create({tuit: tid, likedBy: uid, type: "DISLIKED"});
 }
