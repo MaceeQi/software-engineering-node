@@ -11,6 +11,7 @@ import User from "./User";
  * @property {Number} stats.replies Number of replies for the tuit
  * @property {Number} stats.retuits Number of retuits for the tuit
  * @property {Number} stats.likes Number of likes for the tuit
+ * @property {Number} stats.dislikes Number of dislikes for the tuit
  */
 export default interface Tuit {
     tuit: string;

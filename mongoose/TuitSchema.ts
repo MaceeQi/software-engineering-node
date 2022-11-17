@@ -12,6 +12,7 @@ import Tuit from "../models/Tuit";
  * @property {Number} stats.replies Number of replies for the tuit, default 0
  * @property {Number} stats.retuits Number of retuits for the tuit, default 0
  * @property {Number} stats.likes Number of likes for the tuit, default 0
+ * @property {Number} stats.dislikes Number of dislikes for the tuit, default 0
  */
 const TuitSchema = new mongoose.Schema<Tuit>({
     tuit: {type: String, required: true},
