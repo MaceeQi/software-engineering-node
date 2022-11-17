@@ -20,6 +20,7 @@ const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
  * <ul>
  *     <li>GET /api/users/:uid/likes to retrieve all the tuits liked by a user
  *     </li>
+ *     <li>GET /api/users/:uid/dislikes to retrieve all the tuits disliked by a user</li>
  *     <li>GET /api/tuits/:tid/likes to retrieve all users that liked a tuit
  *     </li>
  *     <li>POST /api/users/:uid/likes/:tid to record that a user likes a tuit
@@ -27,6 +28,7 @@ const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
  *     <li>DELETE /api/users/:uid/unlikes/:tid to record that a user
  *     no longer likes a tuit</li>
  *     <li>PUT /api/users/:uid/likes/:tid to update the likes count</li>
+ *     <li>PUT /api/users/:uid/dislikes/:tid to update the dislikes count </li>
  * </ul>
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
  * @property {LikeController} likeController Singleton controller implementing
@@ -53,6 +55,15 @@ class LikeController {
          * body formatted as JSON arrays containing the tuit objects that were liked
          */
         this.findAllTuitsLikedByUser = (req, res) => LikeController.likeDao.findAllTuitsLikedByUser(req.params.uid)
+            .then(likes => res.json(likes));
+        /**
+         * Retrieves all tuits disliked by a user from the database
+         * @param {Request} req Represents request from client, including the path
+         * parameter uid representing the user that disliked the tuits
+         * @param {Response} res Represents response to client, including the
+         * body formatted as JSON arrays containing the tuit objects that were disliked
+         */
+        this.findAllTuitsDislikedByUser = (req, res) => LikeController.likeDao.findAllTuitsDislikedByUser(req.params.uid)
             .then(likes => res.json(likes));
         /**
          * Creates a new like instance
@@ -125,6 +136,15 @@ class LikeController {
                 res.sendStatus(404);
             }
         });
+        /**
+         * Update dislikes count for tuit and insert or remove a like instance from the database
+         * based on whether the user already has disliked the tuit or not
+         * @param {Request} req Represents request from client, including the path parameters
+         * uid and tid representing the user that is disliking the tuit and
+         * the tuit being disliked
+         * @param {Response} res Represents response to client, including status on whether
+         * updating the dislike was successful or not
+         */
         this.userTogglesTuitDislikes = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const uid = req.params.uid;
             const tid = req.params.tid;
@@ -182,6 +202,7 @@ LikeController.getInstance = (app) => {
     if (LikeController.likeController === null) {
         LikeController.likeController = new LikeController();
         app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
+        app.get("/api/users/:uid/dislikes", LikeController.likeController.findAllTuitsDislikedByUser);
         app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
         app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
         app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);

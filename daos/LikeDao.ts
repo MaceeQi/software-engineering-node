@@ -51,6 +51,18 @@ export default class LikeDao implements LikeDaoI {
             .exec();
 
     /**
+     * Uses LikeModel to retrieve all like documents from likes collection where
+     * tuits were disliked by a given user
+     * @param {string} uid Primary key of the user that disliked tuits
+     * @returns Promise To be notified when the like documents are retrieved from database
+     */
+    findAllTuitsDislikedByUser = async (uid: string): Promise<Like[]> =>
+        LikeModel
+            .find({likedBy: uid, type: "DISLIKED"})
+            .populate("tuit")
+            .exec();
+
+    /**
      * Inserts like instance into the database, where type is liked
      * @param {string} uid Primary key of the user that liked the tuit
      * @param {string} tid Primary key of the tuit that was liked by user

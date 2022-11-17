@@ -12,6 +12,7 @@ import TuitDao from "../daos/TuitDao";
  * <ul>
  *     <li>GET /api/users/:uid/likes to retrieve all the tuits liked by a user
  *     </li>
+ *     <li>GET /api/users/:uid/dislikes to retrieve all the tuits disliked by a user</li>
  *     <li>GET /api/tuits/:tid/likes to retrieve all users that liked a tuit
  *     </li>
  *     <li>POST /api/users/:uid/likes/:tid to record that a user likes a tuit
@@ -42,6 +43,7 @@ export default class LikeController implements LikeControllerI {
         if(LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
+            app.get("/api/users/:uid/dislikes", LikeController.likeController.findAllTuitsDislikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
             app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
@@ -72,6 +74,17 @@ export default class LikeController implements LikeControllerI {
      */
     findAllTuitsLikedByUser = (req: Request, res: Response) =>
         LikeController.likeDao.findAllTuitsLikedByUser(req.params.uid)
+            .then(likes => res.json(likes));
+
+    /**
+     * Retrieves all tuits disliked by a user from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter uid representing the user that disliked the tuits
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the tuit objects that were disliked
+     */
+    findAllTuitsDislikedByUser = (req: Request, res: Response) =>
+        LikeController.likeDao.findAllTuitsDislikedByUser(req.params.uid)
             .then(likes => res.json(likes));
 
     /**

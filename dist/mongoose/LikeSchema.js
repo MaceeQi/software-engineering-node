@@ -28,9 +28,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const mongoose_1 = __importStar(require("mongoose"));
 /**
- * @typedef Like Represents a like - a user likes a tuit
- * @property {ObjectId[]} tuit Tuit that was liked by the user
- * @property {ObjectId[]} likedBy User that liked the tuit
+ * @typedef Like Represents a like - a user likes or dislikes a tuit
+ * @property {ObjectId[]} tuit Tuit that was liked or disliked by the user
+ * @property {ObjectId[]} likedBy User that liked or disliked the tuit
+ * @property {String} type Type of like: like or dislike
  */
 const LikeSchema = new mongoose_1.default.Schema({
     tuit: { type: mongoose_1.Schema.Types.ObjectId, ref: "TuitModel" },
