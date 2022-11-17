@@ -117,6 +117,8 @@ export default class LikeController implements LikeControllerI {
         try {
             // Check if user already liked tuit
             const userAlreadyLikedTuit = await LikeController.likeDao.findUserLikesTuit(userId, tid);
+            // Check if user already disliked tuit
+            const userAlreadyDislikedTuit = await LikeController.likeDao.findUserDislikesTuit(userId, tid);
             // Count how many like this tuit
             const howManyLikedTuit = await LikeController.likeDao.countHowManyLikedTuit(tid);
 
@@ -127,6 +129,13 @@ export default class LikeController implements LikeControllerI {
             if (userAlreadyLikedTuit) {
                 await LikeController.likeDao.userUnlikesTuit(userId, tid);
                 tuit.stats.likes = howManyLikedTuit - 1;
+            }
+            // Already disliked: change dislike to like, decrement dislikes count, increment likes count
+            else if (userAlreadyDislikedTuit) {
+                await LikeController.likeDao.updateLike(userId, tid, "LIKED");
+                const howManyDislikedTuit = await LikeController.likeDao.countHowManyDislikedTuit(tid);
+                tuit.stats.likes = howManyLikedTuit + 1;
+                tuit.stats.dislikes = howManyDislikedTuit - 1;
             }
             // Not yet liked: like + increment likes count
             else {

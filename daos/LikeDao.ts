@@ -5,6 +5,7 @@
 import LikeDaoI from "../interfaces/LikeDaoI";
 import Like from "../models/Like";
 import LikeModel from "../mongoose/LikeModel";
+import TuitModel from "../mongoose/TuitModel";
 
 /**
  * @class LikeDao Implements Data Access Object managing data storage
@@ -34,7 +35,7 @@ export default class LikeDao implements LikeDaoI {
      */
     findAllUsersThatLikedTuit = async (tid: string): Promise<Like[]> =>
         LikeModel
-            .find({tuit: tid})
+            .find({tuit: tid, type: "LIKED"})
             .populate("likedBy")
             .exec();
 
@@ -46,7 +47,7 @@ export default class LikeDao implements LikeDaoI {
      */
     findAllTuitsLikedByUser = async (uid: string): Promise<Like[]> =>
         LikeModel
-            .find({likedBy: uid})
+            .find({likedBy: uid, type: "LIKED"})
             .populate("tuit")
             .exec();
 
@@ -57,7 +58,7 @@ export default class LikeDao implements LikeDaoI {
      * @returns Promise To be notified when like is inserted into the database
      */
     userLikesTuit = async (uid: string, tid: string): Promise<any> =>
-        LikeModel.create({tuit: tid, likedBy: uid});
+        LikeModel.create({tuit: tid, likedBy: uid, type: "LIKED"});
 
     /**
      * Removes like from the database
@@ -76,7 +77,7 @@ export default class LikeDao implements LikeDaoI {
      * @returns Promise To be notified when like is retrieved from database
      */
     findUserLikesTuit = async (uid: string, tid: string): Promise<Like> =>
-        LikeModel.findOne({tuit: tid, likedBy: uid});
+        LikeModel.findOne({tuit: tid, likedBy: uid, type: "LIKED"});
 
     /**
      * Uses LikeModel to count how many like documents there are for a given tuit
@@ -84,7 +85,22 @@ export default class LikeDao implements LikeDaoI {
      * @returns Promise To be notified when count of likes is retrieved from database
      */
     countHowManyLikedTuit = async (tid: string): Promise<any> => {
-        const count = await LikeModel.count({tuit: tid})
+        const count = await LikeModel.count({tuit: tid, type: "LIKED"});
         return count;
     }
+
+    findUserDislikesTuit = async (uid: string, tid: string): Promise<Like> =>
+        LikeModel.findOne({tuit: tid, likeBy: uid, type: "DISLIKED"});
+
+    updateLike = async (uid: string, tid: string, type: string): Promise<any> => {
+        return LikeModel.updateOne(
+            {tuit: tid, likedBy: uid},
+            {$set: {type}})
+    }
+
+    countHowManyDislikedTuit = async (tid: string): Promise<any> => {
+        const count = await LikeModel.count({tuit: tid, type: "DISLIKED"});
+        return count;
+    }
+
 }

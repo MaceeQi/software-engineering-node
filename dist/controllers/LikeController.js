@@ -75,6 +75,8 @@ class LikeController {
          */
         this.userUnlikesTuit = (req, res) => LikeController.likeDao.userUnlikesTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
+        this.findUserLikesTuit = (req, res) => LikeController.likeDao.findUserLikesTuit(req.params.uid, req.params.tid)
+            .then(like => res.json(like));
         /**
          * Update likes count for tuit and insert or remove a like instance from the database
          * based on whether the user already has liked the tuit or not
@@ -93,6 +95,8 @@ class LikeController {
             try {
                 // Check if user already liked tuit
                 const userAlreadyLikedTuit = yield LikeController.likeDao.findUserLikesTuit(userId, tid);
+                // Check if user already disliked tuit
+                const userAlreadyDislikedTuit = yield LikeController.likeDao.findUserDislikesTuit(userId, tid);
                 // Count how many like this tuit
                 const howManyLikedTuit = yield LikeController.likeDao.countHowManyLikedTuit(tid);
                 // Get tuit to get current stats
@@ -101,6 +105,13 @@ class LikeController {
                 if (userAlreadyLikedTuit) {
                     yield LikeController.likeDao.userUnlikesTuit(userId, tid);
                     tuit.stats.likes = howManyLikedTuit - 1;
+                }
+                // Already disliked: change dislike to like, decrement dislikes count, increment likes count
+                else if (userAlreadyDislikedTuit) {
+                    yield LikeController.likeDao.updateLike(userId, tid, "LIKED");
+                    const howManyDislikedTuit = yield LikeController.likeDao.countHowManyDislikedTuit(tid);
+                    tuit.stats.likes = howManyLikedTuit + 1;
+                    tuit.stats.dislikes = howManyDislikedTuit - 1;
                 }
                 // Not yet liked: like + increment likes count
                 else {
@@ -136,6 +147,7 @@ LikeController.getInstance = (app) => {
         app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
         app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
         app.put("/api/users/:uid/likes/:tid", LikeController.likeController.userTogglesTuitLikes);
+        app.get("/api/users/:uid/likes/:tid", LikeController.likeController.findUserLikesTuit);
     }
     return LikeController.likeController;
 };

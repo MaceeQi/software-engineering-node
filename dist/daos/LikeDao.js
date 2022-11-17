@@ -28,7 +28,7 @@ class LikeDao {
          */
         this.findAllUsersThatLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () {
             return LikeModel_1.default
-                .find({ tuit: tid })
+                .find({ tuit: tid, type: "LIKED" })
                 .populate("likedBy")
                 .exec();
         });
@@ -40,7 +40,7 @@ class LikeDao {
          */
         this.findAllTuitsLikedByUser = (uid) => __awaiter(this, void 0, void 0, function* () {
             return LikeModel_1.default
-                .find({ likedBy: uid })
+                .find({ likedBy: uid, type: "LIKED" })
                 .populate("tuit")
                 .exec();
         });
@@ -50,7 +50,7 @@ class LikeDao {
          * @param {string} tid Primary key of the tuit that was liked by user
          * @returns Promise To be notified when like is inserted into the database
          */
-        this.userLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.create({ tuit: tid, likedBy: uid }); });
+        this.userLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.create({ tuit: tid, likedBy: uid, type: "LIKED" }); });
         /**
          * Removes like from the database
          * @param {string} uid Primary key of the user that unliked the tuit
@@ -65,13 +65,22 @@ class LikeDao {
          * @param {string} tid Primary key of the tuit that was liked by a particular user
          * @returns Promise To be notified when like is retrieved from database
          */
-        this.findUserLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.findOne({ tuit: tid, likedBy: uid }); });
+        this.findUserLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.findOne({ tuit: tid, likedBy: uid, type: "LIKED" }); });
         /**
          * Uses LikeModel to count how many like documents there are for a given tuit
          * @param {string} tid Primary key of the tuit that has likes
+         * @returns Promise To be notified when count of likes is retrieved from database
          */
         this.countHowManyLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () {
-            const count = yield LikeModel_1.default.count({ tuit: tid });
+            const count = yield LikeModel_1.default.count({ tuit: tid, type: "LIKED" });
+            return count;
+        });
+        this.findUserDislikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.findOne({ tuit: tid, likeBy: uid, type: "DISLIKED" }); });
+        this.updateLike = (uid, tid, type) => __awaiter(this, void 0, void 0, function* () {
+            return LikeModel_1.default.updateOne({ tuit: tid, likedBy: uid }, { $set: { type } });
+        });
+        this.countHowManyDislikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () {
+            const count = yield LikeModel_1.default.count({ tuit: tid, type: "DISLIKED" });
             return count;
         });
     }
