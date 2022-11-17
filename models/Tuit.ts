@@ -19,6 +19,7 @@ export default interface Tuit {
     stats: {
         replies: Number,
         retuits: Number,
-        likes: Number
+        likes: Number,
+        dislikes: Number
     }
 }
