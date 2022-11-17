@@ -5,7 +5,6 @@
 import LikeDaoI from "../interfaces/LikeDaoI";
 import Like from "../models/Like";
 import LikeModel from "../mongoose/LikeModel";
-import TuitModel from "../mongoose/TuitModel";
 
 /**
  * @class LikeDao Implements Data Access Object managing data storage
@@ -52,7 +51,7 @@ export default class LikeDao implements LikeDaoI {
             .exec();
 
     /**
-     * Inserts like instance into the database
+     * Inserts like instance into the database, where type is liked
      * @param {string} uid Primary key of the user that liked the tuit
      * @param {string} tid Primary key of the tuit that was liked by user
      * @returns Promise To be notified when like is inserted into the database
@@ -61,9 +60,9 @@ export default class LikeDao implements LikeDaoI {
         LikeModel.create({tuit: tid, likedBy: uid, type: "LIKED"});
 
     /**
-     * Removes like from the database
-     * @param {string} uid Primary key of the user that unliked the tuit
-     * @param {string} tid Primary key of the tuit that was unliked by user
+     * Removes like instance from the database
+     * @param {string} uid Primary key of the user
+     * @param {string} tid Primary key of the tuit
      * @returns Promise To be notified when like is removed from the database
      */
     userUnlikesTuit = async (uid: string, tid: string): Promise<any> =>
@@ -80,7 +79,8 @@ export default class LikeDao implements LikeDaoI {
         LikeModel.findOne({tuit: tid, likedBy: uid, type: "LIKED"});
 
     /**
-     * Uses LikeModel to count how many like documents there are for a given tuit
+     * Uses LikeModel to count how many like documents there are for a given tuit where
+     * the type is liked
      * @param {string} tid Primary key of the tuit that has likes
      * @returns Promise To be notified when count of likes is retrieved from database
      */
@@ -89,20 +89,47 @@ export default class LikeDao implements LikeDaoI {
         return count;
     }
 
+    /**
+     * Uses LikeModel to retrieve a like document from likes collection where a user
+     * disliked a particular tuit
+     * @param {string} uid Primary key of the user that disliked the particular tuit
+     * @param {string} tid Primary key of the tuit that was disliked by a particular user
+     * @returns Promise To be notified when document is retrieved from database
+     */
     findUserDislikesTuit = async (uid: string, tid: string): Promise<Like> =>
         LikeModel.findOne({tuit: tid, likeBy: uid, type: "DISLIKED"});
 
+    /**
+     * Finds like document that matches tuit ID (tid) and user ID (uid) and updates
+     * the type to the given type
+     * @param {string} uid Primary key of the user that liked or disliked the particular tuit
+     * @param {string} tid Primary key of the tuit that was liked or disliked by a particular user
+     * @param {string} type New type (LIKED or DISLIKED) to change the like document to
+     * @returns Promise To be notified when document is updated in database
+     */
     updateLike = async (uid: string, tid: string, type: string): Promise<any> => {
         return LikeModel.updateOne(
             {tuit: tid, likedBy: uid},
             {$set: {type}})
     }
 
+    /**
+     * Uses LikeModel to count how many like documents there are for a given tuit where
+     * the type is disliked
+     * @param {string} tid Primary key of the tuit that has dislikes
+     * @returns Promise To be notified when count of likes with disliked type is retrieved from database
+     */
     countHowManyDislikedTuit = async (tid: string): Promise<any> => {
         const count = await LikeModel.count({tuit: tid, type: "DISLIKED"});
         return count;
     }
 
+    /**
+     * Inserts like instance into the database, where type is disliked
+     * @param {string} uid Primary key of the user that disliked the tuit
+     * @param {string} tid Primary key of the tuit that was disliked by user
+     * @returns Promise To be notified when like with type disliked is inserted into the database
+     */
     userDislikesTuit = async (uid: string, tid: string): Promise<any> =>
         LikeModel.create({tuit: tid, likedBy: uid, type: "DISLIKED"});
 }

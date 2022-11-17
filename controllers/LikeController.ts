@@ -19,6 +19,7 @@ import TuitDao from "../daos/TuitDao";
  *     <li>DELETE /api/users/:uid/unlikes/:tid to record that a user
  *     no longer likes a tuit</li>
  *     <li>PUT /api/users/:uid/likes/:tid to update the likes count</li>
+ *     <li>PUT /api/users/:uid/dislikes/:tid to update the dislikes count </li>
  * </ul>
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
  * @property {LikeController} likeController Singleton controller implementing
@@ -153,6 +154,15 @@ export default class LikeController implements LikeControllerI {
         }
     }
 
+    /**
+     * Update dislikes count for tuit and insert or remove a like instance from the database
+     * based on whether the user already has disliked the tuit or not
+     * @param {Request} req Represents request from client, including the path parameters
+     * uid and tid representing the user that is disliking the tuit and
+     * the tuit being disliked
+     * @param {Response} res Represents response to client, including status on whether
+     * updating the dislike was successful or not
+     */
     userTogglesTuitDislikes = async (req, res) => {
         const uid = req.params.uid;
         const tid = req.params.tid;
