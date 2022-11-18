@@ -27,6 +27,7 @@ import AuthenticationController from "./controllers/AuthenticationController";
 var cors = require('cors');
 const session = require('express-session'); // express session establish identity and dialogs btwn users and servers exchanging stateless HTTP req/res
 const app = express();  // express is a library  that allows you to create HTTP servers
+const MemoryStore = require('memorystore')(session);
 
 let sess = {
     secret: `${process.env.SECRET}`,
@@ -34,7 +35,10 @@ let sess = {
     saveUninitialized: true,
     cookie: {
         secure: false
-    }
+    },
+    store: new MemoryStore({
+        checkPeriod: 86400000
+    })
 }
 app.use(session(sess));
 
