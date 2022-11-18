@@ -41,7 +41,12 @@ class LikeDao {
         this.findAllTuitsLikedByUser = (uid) => __awaiter(this, void 0, void 0, function* () {
             return LikeModel_1.default
                 .find({ likedBy: uid, type: "LIKED" })
-                .populate("tuit")
+                .populate({
+                path: "tuit",
+                populate: {
+                    path: "postedBy"
+                }
+            })
                 .exec();
         });
         /**
