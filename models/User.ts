@@ -23,7 +23,7 @@ import Location from "./Location";
  * @property {Location} location User's location
  */
 export default class User {
-    private id: string;
+    private _id: string;
     private username: string = '';
     private password: string = '';
     private firstName: string | null = null;
@@ -50,7 +50,7 @@ export default class User {
      */
     constructor(id: string, username: string, password: string, firstName: string,
                 lastName: string, email: string) {
-        this.id = id;
+        this._id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;

@@ -50,7 +50,7 @@ class User {
         this.dateOfBirth = null;
         this.joined = new Date();
         this.location = null;
-        this.id = id;
+        this._id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
