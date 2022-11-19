@@ -29,7 +29,7 @@ const session = require('express-session'); // express session establish identit
 const app = express();  // express is a library  that allows you to create HTTP servers
 const MongoStore = require('connect-mongo');
 const corsOptions = {
-    origin: ['https://a4--chipper-heliotrope-9263b8.netlify.app/', 'http://localhost:3000'],
+    origin: ['https://a4--chipper-heliotrope-9263b8.netlify.app', 'http://localhost:3000'],
     credentials: true,
     optionSuccessStatus: 200
 }
