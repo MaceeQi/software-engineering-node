@@ -27,30 +27,15 @@ import AuthenticationController from "./controllers/AuthenticationController";
 var cors = require('cors');
 const session = require('express-session'); // express session establish identity and dialogs btwn users and servers exchanging stateless HTTP req/res
 const app = express();  // express is a library  that allows you to create HTTP servers
-
-let sess = {
-    secret: `${process.env.SECRET}`,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false
-    },
-}
-app.use(session(sess));
-
-if (process.env.ENV === 'PRODUCTION') {
-    app.set('trust proxy', 1)   // trust first proxy
-    sess.cookie.secure = true   // serve secure cookies
-}
-
+const MongoStore = require('connect-mongo');
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
     optionSuccessStatus: 200
 }
-
 app.use(cors(corsOptions));        // cors is tech that allows you to have people outside your domain to connect safely to your server
 app.use(express.json());        // configuring our server so that it can parse json; json = format that data will be formatted as
+
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -74,6 +59,22 @@ const DB_QUERY = "retryWrites=true&w=majority";
 const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
 // connect to the database
 mongoose.connect(connectionString, options);
+
+let sess = {
+    secret: `${process.env.SECRET}`,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false
+    },
+    store: MongoStore.create({ mongoUrl: connectionString })
+}
+app.use(session(sess));
+
+if (process.env.ENV === 'PRODUCTION') {
+    app.set('trust proxy', 1)   // trust first proxy
+    sess.cookie.secure = true   // serve secure cookies
+}
 
 function sayHello(req: Request, res: Response) {
     res.send('Welcome to Foundation of Software Engineering!');
