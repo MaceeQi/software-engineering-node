@@ -13,6 +13,7 @@
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
+require("dotenv").config();
 import express from 'express';
 import {Request, Response} from "express";
 import * as mongoose from "mongoose";
@@ -41,8 +42,8 @@ const options = {
 
 // build the connection string
 const PROTOCOL = "mongodb+srv";
-const DB_USERNAME = "fse_tuiter";
-const DB_PASSWORD = "m7RwBEdMZHSqPs0k";
+const DB_USERNAME = `${process.env.DB_USERNAME}`;
+const DB_PASSWORD = `${process.env.DB_PASSWORD}`;
 const HOST = "cluster0.3ivwj4w.mongodb.net";
 const DB_NAME = "tuiter";
 const DB_QUERY = "retryWrites=true&w=majority";
