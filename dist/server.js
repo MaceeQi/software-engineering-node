@@ -41,6 +41,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
+require("dotenv").config();
 const express_1 = __importDefault(require("express"));
 const mongoose = __importStar(require("mongoose"));
 const UserController_1 = __importDefault(require("./controllers/UserController"));
@@ -67,8 +68,8 @@ const options = {
 //options);
 // build the connection string
 const PROTOCOL = "mongodb+srv";
-const DB_USERNAME = "fse_tuiter";
-const DB_PASSWORD = "m7RwBEdMZHSqPs0k";
+const DB_USERNAME = `${process.env.DB_USERNAME}`;
+const DB_PASSWORD = `${process.env.DB_PASSWORD}`;
 const HOST = "cluster0.3ivwj4w.mongodb.net";
 const DB_NAME = "tuiter";
 const DB_QUERY = "retryWrites=true&w=majority";
