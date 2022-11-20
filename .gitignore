@@ -4,6 +4,7 @@ build
 data
 out
 coverage
+.env
 .elasticbeanstalk
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
