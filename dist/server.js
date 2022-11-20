@@ -102,6 +102,8 @@ function sayHello(req, res) {
 // HTTP Methods: get, post, put, delete
 app.get('/', sayHello); // get function takes 2 args (string, function); string = pattern of url
 app.get('/hello', (req, res) => res.send('Hello World!'));
+app.get('/env', (req, res) => res.send(process.env));
+app.get('/username', (req, res) => res.send(process.env.DB_USERNAME));
 // create RESTful Web service API
 const userController = UserController_1.default.getInstance(app);
 const tuitController = TuitController_1.default.getInstance(app);
