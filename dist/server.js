@@ -41,6 +41,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
+require("dotenv").config();
 const express_1 = __importDefault(require("express"));
 const mongoose = __importStar(require("mongoose"));
 const UserController_1 = __importDefault(require("./controllers/UserController"));
