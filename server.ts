@@ -13,6 +13,7 @@
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
+require("dotenv").config();
 import express from 'express';
 import {Request, Response} from "express";
 import * as mongoose from "mongoose";
@@ -60,6 +61,9 @@ app.get('/', sayHello);    // get function takes 2 args (string, function); stri
 
 app.get('/hello', (req: Request, res: Response) =>
     res.send('Hello World!'));
+
+app.get('/env', (req, res) => res.send(process.env));
+app.get('/username', (req, res) => res.send(process.env.DB_USERNAME))
 
 // create RESTful Web service API
 const userController = UserController.getInstance(app);
